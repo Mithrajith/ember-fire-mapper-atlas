@@ -5,6 +5,7 @@ import { BoundingBox, GridData, SimulationParams, Cell, BurnState } from '../typ
 import { getTilesForBounds } from '../utils/tileUtils';
 import { classifyTerrain, getTerrainColor } from '../utils/terrainClassifier';
 import { stepSimulation, igniteCell } from '../utils/cellularAutomata';
+import { processAreaToGrid } from '../utils/tileProcessor';
 
 interface WildfireMapProps {
   onBoundsChange: (bounds: BoundingBox | null) => void;
@@ -28,6 +29,7 @@ const WildfireMap: React.FC<WildfireMapProps> = ({
   const [gridData, setGridData] = useState<GridData | null>(null);
   const [isSelecting, setIsSelecting] = useState(false);
   const [selectionStart, setSelectionStart] = useState<L.LatLng | null>(null);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   // Initialize map
   useEffect(() => {
@@ -109,60 +111,22 @@ const WildfireMap: React.FC<WildfireMapProps> = ({
   // Process selected area and create grid
   const processSelectedArea = async (bounds: BoundingBox) => {
     try {
-      // Calculate grid dimensions based on cell size
-      const latDiff = bounds.north - bounds.south;
-      const lonDiff = bounds.east - bounds.west;
+      setIsProcessing(true);
       
-      // Approximate conversion from degrees to km (rough estimate)
-      const latKm = latDiff * 111; // 1 degree ≈ 111 km
-      const lonKm = lonDiff * 111 * Math.cos((bounds.north + bounds.south) / 2 * Math.PI / 180);
-      
-      const gridWidth = Math.ceil(lonKm / simulationParams.gridCellSize);
-      const gridHeight = Math.ceil(latKm / simulationParams.gridCellSize);
-
-      // Get tiles for the selected area
-      const tiles = getTilesForBounds(bounds, 13); // Zoom level 13 for good detail
-      
-      // Create grid with terrain classification
-      const cells: Cell[][] = [];
-      
-      for (let y = 0; y < gridHeight; y++) {
-        const row: Cell[] = [];
-        for (let x = 0; x < gridWidth; x++) {
-          // Calculate lat/lon for this grid cell
-          const lat = bounds.south + (y / gridHeight) * latDiff;
-          const lon = bounds.west + (x / gridWidth) * lonDiff;
-          
-          // For now, assign random terrain based on position
-          // In a full implementation, this would analyze actual tile pixels
-          const terrainType = classifyTerrain(
-            Math.floor(Math.random() * 255),
-            Math.floor(Math.random() * 255),
-            Math.floor(Math.random() * 255)
-          );
-
-          const cell: Cell = {
-            terrain: terrainType,
-            burnState: BurnState.UNBURNED,
-            x,
-            y,
-            windX: simulationParams.windSpeed * Math.cos(simulationParams.windDirection * Math.PI / 180),
-            windY: simulationParams.windSpeed * Math.sin(simulationParams.windDirection * Math.PI / 180),
-            humidity: simulationParams.humidity,
-            temperature: simulationParams.temperature,
-            burnIntensity: 0,
-            burnDuration: 0
-          };
-
-          row.push(cell);
-        }
-        cells.push(row);
-      }
+      // Use the new tile processor to create classified grid
+      const { cells, width, height } = await processAreaToGrid(
+        bounds,
+        simulationParams.gridCellSize,
+        simulationParams.windSpeed,
+        simulationParams.windDirection,
+        simulationParams.temperature,
+        simulationParams.humidity
+      );
 
       const newGridData: GridData = {
         cells,
-        width: gridWidth,
-        height: gridHeight,
+        width,
+        height,
         bounds,
         cellSize: simulationParams.gridCellSize
       };
@@ -175,6 +139,8 @@ const WildfireMap: React.FC<WildfireMapProps> = ({
 
     } catch (error) {
       console.error('Error processing selected area:', error);
+    } finally {
+      setIsProcessing(false);
     }
   };
 
@@ -398,6 +364,13 @@ const WildfireMap: React.FC<WildfireMapProps> = ({
         <div className="absolute top-4 left-4 bg-card border rounded-lg px-3 py-2 shadow-panel">
           <p className="text-sm text-muted-foreground">
             Grid: {gridData.width}×{gridData.height} cells
+          </p>
+        </div>
+      )}
+      {isProcessing && (
+        <div className="absolute top-4 left-4 bg-card border rounded-lg px-3 py-2 shadow-panel">
+          <p className="text-sm text-muted-foreground">
+            Processing area and classifying terrain...
           </p>
         </div>
       )}
