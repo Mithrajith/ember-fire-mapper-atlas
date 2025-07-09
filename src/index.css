@@ -8,35 +8,58 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 0 0% 98%;
+    --foreground: 20 14% 20%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 20 14% 20%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 20 14% 20%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 15 80% 50%;
+    --primary-foreground: 0 0% 98%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 30 15% 85%;
+    --secondary-foreground: 20 14% 20%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 30 15% 90%;
+    --muted-foreground: 20 14% 40%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 120 30% 45%;
+    --accent-foreground: 0 0% 98%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 30 15% 88%;
+    --input: 30 15% 88%;
+    --ring: 15 80% 50%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
+
+    /* Wildfire simulation colors */
+    --fire-active: 15 90% 55%;
+    --fire-burning: 25 85% 60%;
+    --fire-burned: 20 30% 25%;
+    --terrain-forest: 120 40% 35%;
+    --terrain-grass: 85 45% 50%;
+    --terrain-urban: 0 0% 60%;
+    --terrain-water: 200 80% 50%;
+    --terrain-farmland: 45 60% 65%;
+
+    /* Gradients */
+    --gradient-fire: linear-gradient(135deg, hsl(15 90% 55%), hsl(25 85% 60%));
+    --gradient-terrain: linear-gradient(180deg, hsl(120 40% 35%), hsl(85 45% 50%));
+    --gradient-control: linear-gradient(180deg, hsl(0 0% 100%), hsl(30 15% 95%));
+
+    /* Shadows */
+    --shadow-map: 0 4px 20px hsl(20 30% 25% / 0.15);
+    --shadow-panel: 0 2px 10px hsl(20 30% 25% / 0.1);
+
+    /* Animations */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-fire: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 
     --sidebar-background: 0 0% 98%;
 

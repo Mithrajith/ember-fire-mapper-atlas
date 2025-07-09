@@ -61,7 +61,32 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				fire: {
+					active: 'hsl(var(--fire-active))',
+					burning: 'hsl(var(--fire-burning))',
+					burned: 'hsl(var(--fire-burned))'
+				},
+				terrain: {
+					forest: 'hsl(var(--terrain-forest))',
+					grass: 'hsl(var(--terrain-grass))',
+					urban: 'hsl(var(--terrain-urban))',
+					water: 'hsl(var(--terrain-water))',
+					farmland: 'hsl(var(--terrain-farmland))'
 				}
+			},
+			backgroundImage: {
+				'gradient-fire': 'var(--gradient-fire)',
+				'gradient-terrain': 'var(--gradient-terrain)',
+				'gradient-control': 'var(--gradient-control)'
+			},
+			boxShadow: {
+				'map': 'var(--shadow-map)',
+				'panel': 'var(--shadow-panel)'
+			},
+			transitionTimingFunction: {
+				'smooth': 'var(--transition-smooth)',
+				'fire': 'var(--transition-fire)'
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
